@@ -3,10 +3,10 @@ import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConne
 const ormConfig: PostgresConnectionOptions = {
   type: "postgres",
   host: process.env.DATABASE_HOST || "localhost",
-  port: parseInt(process.env.DATABASE_PORT, 10) || 5433,
+  port: parseInt(process.env.DATABASE_PORT || '5433', 10), // made a small change here, compiler was complaining
   username: process.env.DATABASE_USERNAME || "postgres",
   password: process.env.DATABASE_PASSWORD || "postgres",
-  database: process.env.DATABASE_NAME || "stator",
+  database: process.env.DATABASE_NAME || "ventionsubmission",
   synchronize: !!(process.env.DATABASE_SYNCHRONIZE ?? true),
   entities: [__dirname + "/../../libs/**/*.entity{.ts,.js}"],
   migrations: [__dirname + "/migrations/*.ts"],

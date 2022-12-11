@@ -1,4 +1,4 @@
-import { Todo } from "@stator/models"
+import { Todo } from "@ventionsubmission/models"
 import * as supertest from "supertest"
 import { Repository } from "typeorm"
 

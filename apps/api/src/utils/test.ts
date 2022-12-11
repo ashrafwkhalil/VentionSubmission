@@ -17,7 +17,7 @@ export class TestingHelper {
   app: NestFastifyApplication
 
   async initializeModuleAndApp(testName: string, importedModules: ModuleMetadata["imports"], providers: Provider[] = undefined) {
-    const databaseName = `stator_test_${testName}`
+    const databaseName = `ventionsubmission_test_${testName}`
     const configuration = configurationTest.bind(this, databaseName)
 
     const connectionOptions: ConnectionOptions = { ...configuration().database }

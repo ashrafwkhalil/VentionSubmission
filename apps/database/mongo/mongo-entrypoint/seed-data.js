@@ -1,12 +1,12 @@
 print("===============JAVASCRIPT===============")
-print("Count of rows in stator collection: " + db.stator.count())
+print("Count of rows in ventionsubmission collection: " + db.ventionsubmission.count())
 
-db.stator.insert({ message: "Testing data is preserved on docker-compose down and docker-compose-up" })
+db.ventionsubmission.insert({ message: "Testing data is preserved on docker-compose down and docker-compose-up" })
 
 print("===============AFTER JS INSERT==========")
-print("Count of rows in stator collection: " + db.stator.count())
+print("Count of rows in ventionsubmission collection: " + db.ventionsubmission.count())
 
-data = db.stator.find()
+data = db.ventionsubmission.find()
 while (data.hasNext()) {
   printjson(data.next())
 }

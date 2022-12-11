@@ -1,7 +1,7 @@
-import { Controller } from "@nestjs/common"
+import { Controller, Get } from "@nestjs/common"
 import { ApiOperation, ApiTags } from "@nestjs/swagger"
 import { Crud, CrudController } from "@nestjsx/crud"
-import { Todo } from "@stator/models"
+import { Todo } from "@ventionsubmission/models"
 
 import { TodosService } from "../../services/todos.service"
 
@@ -19,4 +19,8 @@ import { TodosService } from "../../services/todos.service"
 })
 export class TodosController implements CrudController<Todo> {
   constructor(public service: TodosService) {}
+  @Get('hello')
+  getHello() : string {
+    return this.service.getHello();
+  }
 }
