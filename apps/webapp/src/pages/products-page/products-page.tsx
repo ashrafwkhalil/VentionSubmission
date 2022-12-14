@@ -1,110 +1,61 @@
-import { Add, Delete, Done, Edit } from "@mui/icons-material"
-import { Card, CardContent, CircularProgress, List, ListItem, ListItemSecondaryAction, ListItemText, TextField } from "@mui/material"
+
+// Imports
 import { Grid } from "@mui/material"
 import { Product } from "@ventionsubmission/models"
-import React, { ChangeEvent, useEffect, useState } from "react"
-import productsList from "./products-list"
+import React, { useEffect, useState } from "react"
+
 import ProductCard from "../../components/ProductCard"
-import ProductCardv2 from "../../components/ProductCardv2"
-import { LoadingIconButton } from "../../loading-icon-button/loading-icon-button"
-import {
-  useCreateOneProductMutation,
-  useDeleteOneProductMutation,
-  useGetManyProductsQuery,
-  useUpdateOneProductMutation,
-} from "../../redux/endpoints/products-endpoints"
-import { useProductsPageStyles } from "./products-page.styles"
-import Box from "@mui/material"
+import { useCreateOneProductMutation, useGetManyProductsQuery, useUpdateOneProductMutation } from "../../redux/endpoints/products-endpoints"
+import productsList from "../../dummyData/products-list"
 
 interface Props {}
 
 export const ProductsPage: React.FC<Props> = () => {
-  const classes = useProductsPageStyles()
+  // get all products into data
   const { data, isLoading: isGetAllProductsLoading } = useGetManyProductsQuery({ sort: ["id,DESC"] })
+  // get all data into products const
   const products = (data as unknown as Product[]) || []
-  const [isAdding, setIsAdding] = useState(false)
+  // create product mutation
   const [createProduct, { isLoading: isCreatingProduct }] = useCreateOneProductMutation()
+  // update product mutation
   const [updateProduct, { isLoading: isUpdatingProduct }] = useUpdateOneProductMutation()
-  const [deleteProduct, { isLoading: isDeletingProduct }] = useDeleteOneProductMutation()
+  // update product rating mutation
   const [updateProductRating, { isLoading: isUpdatingProductRating }] = useUpdateOneProductMutation()
+  // selected product state
   const [selectedProduct, setSelectedProduct] = useState<Product>()
-  const [productCreateText, setProductCreateText] = useState("")
-  const [productCreateImgUrl, setProductCreateImgUrl] = useState("")
-  const [productEditTextMap, setProductEditTextMap] = useState(new Map<number, string>())
-  const [productRatingMap, setProductRatingMap] = useState(new Map<number, number>())
-  const [productEditIdMap, setProductEditIdMap] = useState(new Map<number, boolean>())
 
-  
+  // This is simply my solution to the problem of having the products somehow persist in the database, even though there is no
+  // actual remote database that both the evaluator and I can access. If there are no products in the database (the first time you run this)
+  // then it will create all the products in the products-list.ts file. 
   useEffect(() => {
-    if (!isGetAllProductsLoading){
-      if(products.length == 0) {
-        productsList.forEach(async (product) => {
+    if (!isGetAllProductsLoading) {
+      if (products.length == 0) {
+        productsList.forEach(async product => {
           await createProduct({ product })
         })
       }
     }
-    
   }, [products])
 
+  // On add to cart, update the product inCart value in the database. I also set selected product so that the loading logic in the loading icon 
+  // button works properly for cart additions
   const onAddToCart = async (product: Product) => {
     setSelectedProduct(product)
-    await updateProduct({ id: product.id, product : { text: product.text, img: product.img, inCart: true } })
+    await updateProduct({ id: product.id, product: { text: product.text, img: product.img, inCart: true } })
   }
-
+  // On remove from cart, update the product inCart value in the database. 
   const onRemoveFromCart = async (product: Product) => {
-    setSelectedProduct(product)
-    await updateProduct({ id: product.id, product : { text: product.text, img: product.img, inCart: false } })
+    await updateProduct({ id: product.id, product: { text: product.text, img: product.img, inCart: false } })
   }
-
-
-  const dummyAddCart = (product: Product) => {
-   console.log('add to cart')
-  }
-
+  // On change rating, update the product rating in the database.
   const onChangeRating = async (product: Product, newRating) => {
-    await updateProductRating({ id: product.id, product : { text: product.text, img: product.img, rating: newRating, inCart : product.inCart } })
-  }
-  const onProductCreateChange = (event: ChangeEvent<HTMLInputElement>) => setProductCreateText(event.target.value)
-
-  const onProductUpdateChange = (product: Product) => (event: ChangeEvent<HTMLInputElement>) => {
-    return setProductEditTextMap({ ...productEditTextMap, [product.id]: event.target.value })
+    await updateProductRating({
+      id: product.id,
+      product: { text: product.text, img: product.img, rating: newRating, inCart: product.inCart },
+    })
   }
 
-  // const onProductCreate = async () => {
-  //   const response = await createProduct({ product: { text: productCreateText, img: "hhhhh", inCart: true } })
-  //   if ("data" in response) {
-  //     setProductCreateText("")
-  //   }
-  // }
-
-  const onProductEditClick = async (product: Product) => {
-    setSelectedProduct(product)
-    if (productEditIdMap[product.id]) {
-      await updateProduct({ id: product.id, product: { text: productEditTextMap[product.id] } })
-      setProductEditIdMap(productEditIdMap => ({
-        ...productEditIdMap,
-        [product.id]: false,
-      }))
-    } else {
-      setProductEditIdMap(productEditIdMap => ({
-        ...productEditIdMap,
-        [product.id]: true,
-      }))
-    }
-  }
-
-  // const onProductCreateKeyPress = () => async (event: React.KeyboardEvent<HTMLDivElement>) => {
-  //   if (event.key === "Enter") {
-  //     await onProductCreate()
-  //   }
-  // }
-
-  // const onProductUpdateKeyPress = (product: Product) => async (event: React.KeyboardEvent<HTMLDivElement>) => {
-  //   if (event.key === "Enter") {
-  //     await onProductEditClick(product)
-  //   }
-  // }
-
+// Very simply UI layout, a grid, with each product mapping to a product card component on the grid
   return (
     <>
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -113,9 +64,10 @@ export const ProductsPage: React.FC<Props> = () => {
             <ProductCard
               onAddToCart={onAddToCart}
               onRemoveFromCart={onRemoveFromCart}
+              // if product is being updated and the selected product is the current product, then show the loading icon
               AddingLoading={isUpdatingProduct && selectedProduct?.id === product.id}
-              RemovingLoading={isAdding}
-              onChangeRating = {onChangeRating}
+              RemovingLoading={false}
+              onChangeRating={onChangeRating}
               product={product}
             />
           </Grid>
