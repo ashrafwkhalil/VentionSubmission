@@ -5,8 +5,9 @@ export const useAppStyles = makeStyles((theme: Theme) => ({
   app: {
     fontFamily: "sans-serif",
     minWidth: 300,
-    maxWidth: 600,
-    margin: "50px auto",
+    maxWidth: 5000,
+    margin: 100,
+    
   },
   cardContainer: {
     display: "grid",

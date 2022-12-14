@@ -7,12 +7,15 @@ import { RootEntity } from "./root.entity"
 export class Product extends RootEntity {
   @Column()
   @MinLength(5, { always: true })
-  name: string
+  text: string
 
   @Column()
-  id: number;
+  inCart?: boolean;
 
   @Column()
-  inCart: boolean;
+  rating?: number;
+
+  @Column()
+  img?: string;
 }
 

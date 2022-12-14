@@ -1,6 +1,5 @@
 import { ConfigService } from "@nestjs/config"
 import { TypeOrmModuleOptions } from "@nestjs/typeorm/dist/interfaces/typeorm-options.interface"
-import { Todo } from "@ventionsubmission/models"
 import { Product } from "@ventionsubmission/models"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -29,7 +28,7 @@ export const getOrmConfigFn = async (configService: ConfigService): Promise<Type
   synchronize: configService.get("database.synchronize"),
   keepConnectionAlive: configService.get("database.keepConnectionAlive"),
   ssl: configService.get("database.certificateAuthority") ? { ca: configService.get("database.certificateAuthority") } : false,
-  entities: [Todo, Product],
+  entities: [Product],
   logging: ["error"],
   retryAttempts: configService.get<number>("database.retryAttempts"),
 })

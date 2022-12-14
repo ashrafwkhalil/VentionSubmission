@@ -1,9 +1,9 @@
 import { api } from "../api"
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
-    getManyTodos: build.query<GetManyTodosApiResponse, GetManyTodosApiArg>({
+    getManyProducts: build.query<GetManyProductsApiResponse, GetManyProductsApiArg>({
       query: queryArg => ({
-        url: `/api/todos`,
+        url: `/api/products`,
         params: {
           fields: queryArg.fields,
           s: queryArg.s,
@@ -18,21 +18,21 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
-    createOneTodo: build.mutation<CreateOneTodoApiResponse, CreateOneTodoApiArg>({
-      query: queryArg => ({ url: `/api/todos`, method: "POST", body: queryArg.todo }),
+    createOneProduct: build.mutation<CreateOneProductApiResponse, CreateOneProductApiArg>({
+      query: queryArg => ({ url: `/api/products`, method: "POST", body: queryArg.product }),
     }),
-    updateOneTodo: build.mutation<UpdateOneTodoApiResponse, UpdateOneTodoApiArg>({
-      query: queryArg => ({ url: `/api/todos/${queryArg.id}`, method: "PATCH", body: queryArg.todo }),
+    updateOneProduct: build.mutation<UpdateOneProductApiResponse, UpdateOneProductApiArg>({
+      query: queryArg => ({ url: `/api/products/${queryArg.id}`, method: "PATCH", body: queryArg.product }),
     }),
-    deleteOneTodo: build.mutation<DeleteOneTodoApiResponse, DeleteOneTodoApiArg>({
-      query: queryArg => ({ url: `/api/todos/${queryArg.id}`, method: "DELETE" }),
+    deleteOneProduct: build.mutation<DeleteOneProductApiResponse, DeleteOneProductApiArg>({
+      query: queryArg => ({ url: `/api/products/${queryArg.id}`, method: "DELETE" }),
     }),
   }),
   overrideExisting: false,
 })
-export { injectedRtkApi as todosApi }
-export type GetManyTodosApiResponse = /** status 200 Get many base response */ GetManyTodoResponseDto | Todo[]
-export type GetManyTodosApiArg = {
+export { injectedRtkApi as productsApi }
+export type GetManyProductsApiResponse = /** status 200 Get many base response */ GetManyProductsResponseDto | Product[]
+export type GetManyProductsApiArg = {
   /** Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a> */
   fields?: string[]
   /** Adds search condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#search" target="_blank">Docs</a> */
@@ -54,30 +54,33 @@ export type GetManyTodosApiArg = {
   /** Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a> */
   cache?: number
 }
-export type CreateOneTodoApiResponse = /** status 201 Get create one base response */ Todo
-export type CreateOneTodoApiArg = {
-  todo: Todo
+export type CreateOneProductApiResponse = /** status 201 Get create one base response */ Product
+export type CreateOneProductApiArg = {
+  product: Product
 }
-export type UpdateOneTodoApiResponse = /** status 200 Response */ Todo
-export type UpdateOneTodoApiArg = {
+export type UpdateOneProductApiResponse = /** status 200 Response */ Product
+export type UpdateOneProductApiArg = {
   id: number
-  todo: Todo
+  product: Product
 }
-export type DeleteOneTodoApiResponse = unknown
-export type DeleteOneTodoApiArg = {
+export type DeleteOneProductApiResponse = unknown
+export type DeleteOneProductApiArg = {
   id: number
 }
-export type Todo = {
+export type Product = {
   text: string
+  inCart?: boolean,
+  img?: string,
   id?: number
+  rating?: number,
   createdAt?: string
   updatedAt?: string
 }
-export type GetManyTodoResponseDto = {
-  data: Todo[]
+export type GetManyProductsResponseDto = {
+  data: Product[]
   count: number
   total: number
   page: number
   pageCount: number
 }
-export const { useGetManyTodosQuery, useCreateOneTodoMutation, useUpdateOneTodoMutation, useDeleteOneTodoMutation } = injectedRtkApi
+export const { useGetManyProductsQuery, useCreateOneProductMutation, useUpdateOneProductMutation, useDeleteOneProductMutation } = injectedRtkApi
