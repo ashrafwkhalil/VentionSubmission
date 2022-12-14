@@ -3,7 +3,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "run_all": "npm run postgres:nosudo & npm start api & npm start webapp",
+    "run_all:nosudo": "npm run postgres:nosudo & npm start api & npm start webapp",
+    "run_all": "npm run postgres & npm start api & npm start webapp",
     "affected": "nx affected",
     "affected:apps": "nx affected:apps",
     "affected:build": "nx affected:build",
