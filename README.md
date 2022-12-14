@@ -33,3 +33,10 @@ This was relatively simple, as the only interactions with the db that were requi
 
 # How I populate the DB with dummy data
 Now, the issue here is that we do not share access to a remote DB, and I did not implement some adminstrative page where you could add products to the DB. So my simple solution that ensures that all users that run this application manage to populate the DB with the same 9 products. What I added is simply a useEffect in the product page that has a callback that checks first if the getProducts query is loading, if not, it checks if there are 0 products in the DB (which will be the case the first time you run the application), and if so, creates 9 products described in a separate file in the DB. From this point forward, the DB will be populated, so this callback will never execute again. Also, I passed an empty dependency array to the useEffect, so it will only run once, when the page renders.
+
+# Demo
+
+
+https://user-images.githubusercontent.com/60198939/207656581-07e0a03a-0156-4bfa-a189-cc2cbf410464.mp4
+
+
