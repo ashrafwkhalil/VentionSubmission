@@ -36,7 +36,6 @@ async function bootstrap() {
   app.setGlobalPrefix("api")
 
   configureSwagger(app)
-
   const configService = app.get(ConfigService)
   app.listen(configService.get<number>("port"), configService.get<string>("address")).catch(error => console.error(error))
 }

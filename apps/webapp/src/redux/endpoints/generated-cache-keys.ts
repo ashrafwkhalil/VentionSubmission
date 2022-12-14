@@ -3,7 +3,7 @@
  */
 
 import { todosApi } from "./todos-endpoints"
-
+import { productsApi } from "./products-endpoints"
 export const addTodosCacheKeys = () =>
   todosApi.enhanceEndpoints({
     endpoints: {
@@ -13,6 +13,18 @@ export const addTodosCacheKeys = () =>
       deleteOneTodo: { invalidatesTags: ["todos"] },
     },
   })
+
+  export const addProductsCacheKeys = () =>
+  productsApi.enhanceEndpoints({
+    endpoints: {
+      getManyProducts: { providesTags: ["products"] },
+      createOneProduct: { invalidatesTags: ["products"] },
+      updateOneProduct: { invalidatesTags: ["products"] },
+      deleteOneProduct: { invalidatesTags: ["products"] },
+    },
+  })
+  
 export const addGeneratedCacheKeys = () => {
   addTodosCacheKeys()
+  addProductsCacheKeys()
 }

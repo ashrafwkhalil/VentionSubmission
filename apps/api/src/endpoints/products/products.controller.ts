@@ -5,8 +5,8 @@ import { Product } from "@ventionsubmission/models"
 
 import { ProductsService } from "../../services/products.service"
 
-@ApiTags("Products")
-@Controller("Products")
+@ApiTags("products")
+@Controller("products")
 @Crud({
   model: { type: Product },
   routes: {
