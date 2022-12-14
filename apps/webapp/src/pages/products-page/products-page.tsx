@@ -4,9 +4,9 @@ import { Grid } from "@mui/material"
 import { Product } from "@ventionsubmission/models"
 import React, { useEffect, useState } from "react"
 
-import ProductCard from "../../components/ProductCard"
+import ProductCard from "../../components/product-card"
 import { useCreateOneProductMutation, useGetManyProductsQuery, useUpdateOneProductMutation } from "../../redux/endpoints/products-endpoints"
-import productsList from "../../dummyData/products-list"
+import productsList from "../../dummy-data/products-list"
 
 interface Props {}
 
